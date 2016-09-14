@@ -1,0 +1,32 @@
+export const curry = fn => (...args) => fn.bind(null, ...args);
+export const compose = (...fns) => x => reduceRight((v, f) => f(v), x)(fns);
+export const pipe = (...fns) => x => reduce((v, f) => f(v), x)(fns);
+
+// map :: (a -> a) -> [a] -> [a]
+export const map = curry((fn, arr) => arr.map(fn));
+
+// filter :: (a -> Bool) -> [a] -> [a]
+export const filter = curry((fn, arr) => arr.filter(fn));
+
+// reduce :: (b -> a -> b) -> b -> [a] -> b
+export const reduce = curry((fn, x, arr) => arr.reduce(fn, x));
+
+// reduceRight :: (b -> a -> b) -> b -> [a] -> b
+export const reduceRight = curry((fn, x, arr) => arr.reduceRight(fn, x));
+
+
+// id :: a -> a
+export const id = (x) => x;
+
+// trace :: a -> a
+export const trace = (label, x) => (console.log(`${label}: ${x}`), x); 
+
+
+// sum :: [Number] -> Number
+export const sum = reduce((total, x) => total + x, 0);
+
+// join :: [a] -> String
+export const join = curry((str, arr) => arr.join(str));
+
+// split :: String -> [String]
+export const split = curry((splitOn, str) => str.split(splitOn));
