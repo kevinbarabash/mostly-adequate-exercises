@@ -19,7 +19,11 @@ export const reduceRight = curry((fn, x, arr) => arr.reduceRight(fn, x));
 export const id = (x) => x;
 
 // trace :: a -> a
-export const trace = (label, x) => (console.log(`${label}: ${x}`), x); 
+export const trace = curry((label, x) => (console.log(`${label}: %o`, x), x)); 
+
+
+// prop :: String -> Object -> a
+export const prop = curry((key, obj) => obj[key]);
 
 
 // sum :: [Number] -> Number
