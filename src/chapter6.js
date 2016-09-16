@@ -1,4 +1,4 @@
-import {curry, compose, map, trace, prop} from '../shared/util.js';
+import {curry, compose, map, trace, prop} from './util.js';
 
 import $ from 'jquery';
 
@@ -12,9 +12,10 @@ const url = (term) => 'https://api.flickr.com/services/feeds/photos_public.gne?t
 
 const img = (url) => $(`<img src="${url}"/>`);
 
-const mediaUrl = compose(prop('m'), prop('media'));
-const srcs = compose(map(mediaUrl), prop('items'));
-const images = compose(map(img), srcs);
+const extractUrl = compose(prop('m'), prop('media'));
+const mediaToImg = compose(img, extractUrl);
+const images = compose(map(mediaToImg), prop('items'));
+
 const renderImages = compose(Impure.setHTML('body'), images);
 
 const app = compose(Impure.getJSON(renderImages), url);

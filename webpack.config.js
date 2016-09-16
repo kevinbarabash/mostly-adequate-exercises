@@ -1,7 +1,11 @@
 module.exports = {
-    entry: "./chapter5/flickr.js",
+    entry: {
+        "chapter5": "./src/chapter5.js",
+        "chapter6": "./src/chapter6.js",
+    },
     output: {
-        filename: "./build/flickr.js"
+        filename: "[name].js",
+        path: "./build",
     },
     module: {
         loaders: [
