@@ -1,4 +1,4 @@
-import {compose, pipe, curry, prop, match, concat} from './util';
+import {compose, pipe, curry, prop, match, concat, id} from './util';
 
 class Identity {
     constructor(x) {
@@ -199,15 +199,12 @@ const moment = require('moment');
 //  getAge :: Date -> User -> Either(String, Number)
 const getAge = curry((now, user) => {
     const birthdate = moment(user.birthdate, 'YYYY-MM-DD');
-  
-    if (!birthdate.isValid()) {
+    return birthdate.isValid()
+        ? Right.of(now.diff(birthdate, 'years'))
+        : Left.of('Birth date could not be parsed');
         // Left ignore all calls to map... so when we run into an error
         // we return a left and that error gets propagated all the way
         // out of the compose/pipe chain
-        return Left.of('Birth date could not be parsed');
-    }
-
-    return Right.of(now.diff(birthdate, 'years'));
 });
 
 const log = (...args) => {
@@ -232,3 +229,22 @@ zoltar({birthdate: '2005-12-12'})
 
 // doesn't print anything, but returns Left('Birth date could not be parsed')
 zoltar({birthdate: 'balloons!'})
+
+// either :: (a -> c) -> (b -> c) -> Either a b -> c
+// NOTE: to use this safely we should use a static type checker
+// type Either = Left | Right 
+const either = curry((f, g, e) => {
+    switch (e.constructor) {
+        case Left: return f(e.__value);
+        case Right: return g(e.__value);
+    }
+});
+
+const zoltar2 = compose(console.log, either(id, fortune), getAge(moment()));
+
+console.log('ZOLTAR 2');
+zoltar({birthdate: '2005-12-12'})
+zoltar({birthdate: 'balloons!'})
+
+
+
