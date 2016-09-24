@@ -1,4 +1,5 @@
-export const curry = fn => (...args) => fn.bind(null, ...args);
+export const curry = fn => (...args) => (args.length < fn.length) 
+    ? curry(fn.bind(null, ...args)) : fn.apply(null, args);
 export const compose = (...fns) => x => reduceRight((v, f) => f(v), x)(fns);
 export const pipe = (...fns) => x => reduce((v, f) => f(v), x)(fns);
 export const flip = (fn) => (...args) => fn(args.reverse());
@@ -35,5 +36,8 @@ export const join = curry((str, arr) => arr.join(str));
 
 // split :: String -> [String]
 export const split = curry((splitOn, str) => str.split(splitOn));
+
+// concat :: String -> String -> String
+export const concat = curry((a, b) => a.concat(b));
 
 export const match = curry((regexp, str) => str.match(regexp));
