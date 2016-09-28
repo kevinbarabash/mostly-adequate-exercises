@@ -10,6 +10,8 @@ export const map = curry((fn, arr) => arr.map(fn));
 // filter :: (a -> Bool) -> [a] -> [a]
 export const filter = curry((fn, arr) => arr.filter(fn));
 
+export const find = curry((fn, arr) => arr.find(fn));
+
 // reduce :: (b -> a -> b) -> b -> [a] -> b
 export const reduce = curry((fn, x, arr) => arr.reduce(fn, x));
 
@@ -27,6 +29,10 @@ export const trace = curry((label, x) => (console.log(`${label}: %o`, x), x));
 // prop :: String -> Object -> a
 export const prop = curry((key, obj) => obj[key]);
 
+export const eq = curry((a, b) => a === b); 
+
+export const head = (arr) => arr[0];
+export const last = (arr) => arr[arr.length - 1];
 
 // sum :: [Number] -> Number
 export const sum = reduce((total, x) => total + x, 0);
